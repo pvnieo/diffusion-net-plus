@@ -44,7 +44,7 @@ pip install trimesh potpourri3d
 
 ## :book: Usage
 
-The DiffusionNet++ has a simple API that can be used to instantiate the model, prepare the data, and batch it using the PyG library. The following code snippet demonstrates how to use the DiffusionNet++ model to create to extract features from a batch that has shapes of different sizes.
+The DiffusionNet++ has a simple API that can be used to instantiate the model, prepare the data, and batch it using the PyG library. The following code snippet demonstrates how to use the DiffusionNet++ model to extract features from a batch that has shapes of different sizes.
 
 ```python
 import numpy as np
