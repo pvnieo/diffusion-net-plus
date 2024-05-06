@@ -66,7 +66,7 @@ data1 = DiffusionData(pos=torch.from_numpy(v1), face=torch.from_numpy(f1).T)
 data2 = DiffusionData(pos=torch.from_numpy(v2), face=torch.from_numpy(f2).T)
 
 # compute the diffusion operators
-diffusion_transform = DiffusionOperatorsTransform(neig=97)  # compute the diffusion operators with 97 eigenvalues
+diffusion_transform = DiffusionOperatorsTransform(neig=97)  # compute the diffusion net operators with 97 eigenvalues
 data1 = diffusion_transform(data1)
 data2 = diffusion_transform(data2)
 
@@ -75,7 +75,7 @@ my_batch = Batch.from_data_list([data1, data2])
 my_batch.x = my_batch.pos.clone()  # set the input features to the positions
 
 # create the model and do a forward pass
-diffusion_net = DiffusionNet(3, 69)  # input features are 3D positions, output features are 69
+diffusion_net = DiffusionNet(3, 69)  # input features are 3D positions, output features dimension is 69
 output = diffusion_net(my_batch)
 print(output.x.shape)
 >>> torch.Size([(N1 + N2), 69])
@@ -86,3 +86,15 @@ print(output.x.shape)
 We reproduced the results of the original paper on the XX dataset. The results are detailed in the technical report [here](https://arxiv.org/abs/XXXX.XXXXX).
 
 
+## :mortar_board: Citation
+If you find this work useful in your research, please consider citing:
+```bibtex
+@inproceedings{mallet2024atomsurf,
+    title={AtomSurf : Surface Representation for Learning on Protein Structures},
+    author={Vincent Mallet and Souhaib Attaiki and Maks Ovsjanikov},
+    year={2024},
+    eprint={2309.16519},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}
+```
