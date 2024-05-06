@@ -34,4 +34,4 @@ class DiffusionOperatorsTransform(object):
         return data
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(k_eig={self.n_eig})"
+        return f"{self.__class__.__name__}(k_eig={self.n_eig}, save_L={self.save_L}, save_frames={self.save_frames})"
