@@ -107,7 +107,7 @@ def vertex_normals(verts, faces, n_neighbors_cloud=30):
         scale = np.linalg.norm(bbox) * 1e-4
         wiggle = (np.random.RandomState(seed=777).rand(*verts.shape) - 0.5) * scale
         wiggle_verts = verts + bad_normals_mask * wiggle
-        normals = mesh_vertex_normals(wiggle_verts, faces)
+        normals = mesh_vertex_normals(wiggle_verts, faces, n_neighbors_cloud)
 
     # if still NaN assign random normals (probably means unreferenced verts in mesh)
     bad_normals_mask = np.isnan(normals).any(axis=1)
