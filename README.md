@@ -66,7 +66,7 @@ data1 = DiffusionData(pos=torch.from_numpy(v1), face=torch.from_numpy(f1).T)
 data2 = DiffusionData(pos=torch.from_numpy(v2), face=torch.from_numpy(f2).T)
 
 # compute the diffusion operators
-diffusion_transform = DiffusionOperatorsTransform(neig=97)  # compute the diffusion net operators with 97 eigenvalues
+diffusion_transform = DiffusionOperatorsTransform(n_eig=97)  # compute the diffusion net operators with 97 eigenvalues
 data1 = diffusion_transform(data1)
 data2 = diffusion_transform(data2)
 

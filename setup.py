@@ -7,7 +7,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='My Name',
-    author_email='your.email@example.com',
+    author_email='my.email@example.com',
     packages=find_packages(),
     install_requires=[
         # List your dependencies here as strings, e.g.,
