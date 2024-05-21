@@ -44,38 +44,39 @@ class DiffusionNetBlock(nn.Module):
         # self.bn = nn.BatchNorm1d(C_width)
 
     def forward(self, surfaces):
+        x_in = surfaces.x
 
         # Diffusion block
-        x_diffuse_batch = self.diffusion(surfaces.x, surfaces.mass, surfaces.evals, surfaces.evecs, surfaces.batch)
+        x_diffuse = self.diffusion(x_in, surfaces.mass, surfaces.evals, surfaces.evecs, surfaces.batch)
 
         # Compute gradient features, if using
         if self.with_gradient_features:
 
             # Compute gradients
-            x_gradX = surfaces.gradX @ x_diffuse_batch
-            x_gradY = surfaces.gradY @ x_diffuse_batch
-            x_grad_batch = torch.stack((x_gradX, x_gradY), dim=-1)
+            x_gradX = surfaces.gradX @ x_diffuse
+            x_gradY = surfaces.gradY @ x_diffuse
+            x_grad = torch.stack((x_gradX, x_gradY), dim=-1)
 
             # Evaluate gradient features
-            x_grad_features_batch = self.gradient_features(x_grad_batch)
+            x_grad_features = self.gradient_features(x_grad)
 
             # Stack inputs to mlp
-            feature_combined = torch.cat((surfaces.x, x_diffuse_batch, x_grad_features_batch), dim=-1)
+            feature_combined = torch.cat((x_in, x_diffuse, x_grad_features), dim=-1)
         else:
             # Stack inputs to mlp
-            feature_combined = torch.cat((surfaces.x, x_diffuse_batch), dim=-1)
+            feature_combined = torch.cat((x_in, x_diffuse), dim=-1)
 
         # Apply the mlp
-        x0_out_batch = self.mlp(feature_combined)
+        x0_out = self.mlp(feature_combined)
 
         # Skip connection
-        x0_out_batch = x0_out_batch + surfaces.x
+        x0_out = x0_out + x_in
 
         # # apply batch norm # todo: is this needed?
         # x0_out_batch = self.bn(x0_out_batch)
 
         # update the features
-        surfaces.x = x0_out_batch
+        surfaces.x = x0_out
         return surfaces
 
 
