@@ -16,20 +16,20 @@ class MiniMLP(nn.Sequential):
         super().__init__()
 
         for i in range(len(layer_sizes) - 1):
-            is_last = i + 2 == len(layer_sizes)
+            is_last = (i + 2) == len(layer_sizes)
 
             if dropout > 0. and i > 0:
-                self.add_module(f"{name}_mlp_layer_dropout_{i:03d}", nn.Dropout(dropout))
+                self.add_module(f"{name}_layer_dropout_{i:03d}", nn.Dropout(dropout))
 
             # Affine map
-            self.add_module(f"{name}_mlp_layer_{i:03d}", nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+            self.add_module(f"{name}_layer_{i:03d}", nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
 
             if use_bn:
-                self.add_module(f"{name}_mlp_layer_bn_{i:03d}", nn.BatchNorm1d(layer_sizes[i + 1]))
+                self.add_module(f"{name}_layer_bn_{i:03d}", nn.BatchNorm1d(layer_sizes[i + 1]))
 
             # non-linearity (but not on the last layer)
             if not is_last:
-                self.add_module(f"{name}_mlp_act_{i:03d}", activation())
+                self.add_module(f"{name}_act_{i:03d}", activation())
 
 
 class LearnedTimeDiffusion(nn.Module):
@@ -49,14 +49,14 @@ class LearnedTimeDiffusion(nn.Module):
         neig = evals.size(0) // bs
 
         # todo do we need to do clipping here? do we need to remove do torch.no_grad? is abs ok (Nick didn't use it initially)?
-        diffusion_time = torch.abs(self.diffusion_time)
-        diffusion_time = torch.clamp(diffusion_time, min=1e-8)
+        with torch.no_grad():
+            self.diffusion_time.data = torch.clamp(self.diffusion_time, min=1e-8)
 
         # Transform to spectral
         x_spec = to_basis(x, evecs, mass, batch)
 
         # Diffuse
-        diffusion_coefs = torch.exp(-evals.unsqueeze(-1) * diffusion_time.unsqueeze(0))
+        diffusion_coefs = torch.exp(-evals.unsqueeze(-1) * self.diffusion_time.unsqueeze(0))
         x_diffuse_spec = diffusion_coefs * x_spec
 
         # Transform back to per-vertex
