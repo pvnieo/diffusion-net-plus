@@ -1,3 +1,5 @@
+:rotating_light::construction: **WORK IN PROGRESS** :construction::rotating_light:
+
 # DiffusionNet++ :speaking_head: :spider_web: :heavy_plus_sign::heavy_plus_sign:
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-brightgreen)](https://arxiv.org/abs/XXXX.XXXXX)
@@ -35,7 +37,7 @@ conda create -n diffusion -y
 conda activate diffusion
 conda install -y python=3.8
 # use the correct cuda version, e.g., `11.7` for cuda 11.7
-conda install pytorch=2.2 torchvision torchaudio pytorch-cuda=${CUDA-VERSION} -c pytorch -c nvidia
+conda install pytorch=2.2 torchvision torchaudio pytorch-cuda=${CUDA-VERSION} -c pytorch -c nvidia -y
 conda install pyg -c pyg
 conda install pytorch-sparse -c pyg
 pip install git+https://github.com/pyg-team/pyg-lib.git
