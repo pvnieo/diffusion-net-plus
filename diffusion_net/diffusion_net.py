@@ -12,12 +12,14 @@ class DiffusionNetBlock(nn.Module):
     Inputs and outputs are defined at vertices
     """
 
-    def __init__(self, C_width, mlp_hidden_dims, dropout=0.5, use_bn=True, init_time=2.0, init_std=2.0,
+    def __init__(self, C_width, mlp_hidden_dims=None, n_layers=2, dropout=0.5, use_bn=True, init_time=2.0, init_std=2.0,
                  diffusion_method="spectral", with_gradient_features=True, with_gradient_rotations=True):
         super().__init__()
 
         # Specified dimensions
         self.C_width = C_width
+        if mlp_hidden_dims is None:
+            mlp_hidden_dims = [C_width] * n_layers
         self.mlp_hidden_dims = mlp_hidden_dims
 
         self.dropout = dropout
@@ -25,7 +27,8 @@ class DiffusionNetBlock(nn.Module):
         self.with_gradient_rotations = with_gradient_rotations
 
         # Diffusion block
-        self.diffusion = LearnedTimeDiffusion(self.C_width, method=diffusion_method, init_time=init_time, init_std=init_std)
+        self.diffusion = LearnedTimeDiffusion(self.C_width, method=diffusion_method, init_time=init_time,
+                                              init_std=init_std)
 
         self.MLP_C = 2 * self.C_width
 
