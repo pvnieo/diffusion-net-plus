@@ -12,7 +12,8 @@ class DiffusionNetBlock(nn.Module):
     Inputs and outputs are defined at vertices
     """
 
-    def __init__(self, C_width, mlp_hidden_dims=None, n_layers=2, dropout=0.5, use_bn=True, init_time=2.0, init_std=2.0,
+    def __init__(self, C_width, mlp_hidden_dims=None, n_layers=2, dropout=0.5, use_bn=True, use_layernorm=False,
+                 init_time=2.0, init_std=2.0,
                  diffusion_method="spectral", with_gradient_features=True, with_gradient_rotations=True):
         super().__init__()
 
@@ -41,7 +42,9 @@ class DiffusionNetBlock(nn.Module):
         # MLPs
         self.mlp = MiniMLP([self.MLP_C] + list(self.mlp_hidden_dims) + [self.C_width],
                            dropout=self.dropout,
-                           use_bn=use_bn)
+                           use_bn=use_bn,
+                           use_layernorm=use_layernorm,
+                           )
 
         # todo: is this needed?
         # self.bn = nn.BatchNorm1d(C_width)
@@ -85,7 +88,8 @@ class DiffusionNetBlock(nn.Module):
 
 class DiffusionNet(nn.Module):
     def __init__(self, C_in, C_out, C_width=128, N_block=4, last_activation=None, mlp_hidden_dims=None, dropout=0.5,
-                 with_gradient_features=True, with_gradient_rotations=True, use_bn=True, init_time=2.0, init_std=2.0):
+                 with_gradient_features=True, with_gradient_rotations=True, use_bn=True, use_layernorm=False,
+                 init_time=2.0, init_std=2.0):
 
         super().__init__()
 
@@ -124,6 +128,7 @@ class DiffusionNet(nn.Module):
                 with_gradient_features=with_gradient_features,
                 with_gradient_rotations=with_gradient_rotations,
                 use_bn=use_bn,
+                use_layernorm=use_layernorm,
                 init_time=init_time,
                 init_std=init_std
             )

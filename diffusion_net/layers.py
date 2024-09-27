@@ -12,7 +12,7 @@ class MiniMLP(nn.Sequential):
     A simple MLP with configurable hidden layer sizes.
     """
 
-    def __init__(self, layer_sizes, dropout=0.5, use_bn=True, activation=nn.ReLU, name="mlp"):
+    def __init__(self, layer_sizes, dropout=0.5, use_bn=True, use_layernorm=False, activation=nn.ReLU, name="mlp"):
         super().__init__()
 
         for i in range(len(layer_sizes) - 1):
@@ -26,6 +26,9 @@ class MiniMLP(nn.Sequential):
 
             if use_bn:
                 self.add_module(f"{name}_layer_bn_{i:03d}", nn.BatchNorm1d(layer_sizes[i + 1]))
+
+            if use_layernorm:
+                self.add_module(f"{name}_layer_layernorm_{i:03d}", nn.LayerNorm(layer_sizes[i + 1]))
 
             # non-linearity (but not on the last layer)
             if not is_last:
@@ -63,7 +66,6 @@ class LearnedTimeDiffusion(nn.Module):
         evecs = unbatch(evecs, batch, dim=0)
         x_diffuse_spec = x_diffuse_spec.split(neig)
         x_diffuse = torch.cat(grouped_matmul(evecs, x_diffuse_spec), dim=0)
-
         return x_diffuse
 
 
