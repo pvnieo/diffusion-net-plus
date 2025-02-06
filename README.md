@@ -91,12 +91,10 @@ We reproduced the results of the original paper on the XX dataset. The results a
 ## :mortar_board: Citation
 If you find this work useful in your research, please consider citing:
 ```bibtex
-@inproceedings{mallet2024atomsurf,
-    title={AtomSurf : Surface Representation for Learning on Protein Structures},
-    author={Vincent Mallet and Souhaib Attaiki and Maks Ovsjanikov},
-    year={2024},
-    eprint={2309.16519},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG}
+@inproceedings{mallet2024atomsurfsurfacerepresentation,
+      title={AtomSurf : Surface Representation for Learning on Protein Structures}, 
+      author={Vincent Mallet and Souhaib Attaiki and Yangyang Miao and Bruno Correia and Maks Ovsjanikov},
+      year={2025},
+      booktitle={The Thirteenth International Conference on Learning Representations (ICLR)},
 }
 ```
